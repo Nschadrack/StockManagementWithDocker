@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG")
 
 ALLOWED_HOSTS = ["*"]
 
@@ -79,18 +79,18 @@ WSGI_APPLICATION = 'stockM.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db' / 'db.sqlite3',
-    # }
     'default': {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("POSTGRES_DB"),
-        "USER": os.getenv("POSTGRES_USER"),
-        "PASSWORD": os.getenv("POSTGRES_PASS"),
-        "HOST": os.getenv("POSTGRES_HOST"),
-        "PORT": os.getenv("POSTGRES_PORT")
-    },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db' / 'db.sqlite3',
+    }
+    # 'default': {
+    #     "ENGINE": "django.db.backends.postgresql",
+    #     "NAME": os.getenv("POSTGRES_DB"),
+    #     "USER": os.getenv("POSTGRES_USER"),
+    #     "PASSWORD": os.getenv("POSTGRES_PASS"),
+    #     "HOST": os.getenv("POSTGRES_HOST"),
+    #     "PORT": os.getenv("POSTGRES_PORT")
+    # },
 
 }
 
