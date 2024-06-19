@@ -1,0 +1,7 @@
+.env
+venv
+stockM/__pycache__
+stock/__pycache__
+db/db.sqlite3
+stock/migrations/*
+!stock/migrations/__init__.py

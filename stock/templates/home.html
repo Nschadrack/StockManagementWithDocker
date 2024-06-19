@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% load static %}
+        <title>Stock Management</title>
+        <link rel="stylesheet" href="{% static 'main.css' %}">
+    </head>
+    <body>
+        <h2 class="header">Stock Management</h2>
+        <hr/>
+        <main>
+            <div class="main-divs" id="stock-list">
+                <table class="styled-table">
+                    <thead>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Current quantity</th>
+                        <th>Accumulated quantity</th>
+                        <th colspan="2"></th>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                            <tr>
+                                <td>{{ product.name }}</td>
+                                <td>{{ product.price }}</td>
+                                <td>{{ product.current_quantity }} {{ product.unit }}</td>
+                                <td>{{ product.all_quantity }} {{ product.unit }}</td>
+                                <td><a href="{% url 'stock:detail' product.id %}" class="btn btn-link">Edit</a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+            </div>
+            <div class="main-divs" id="transactions-stock">
+                {% if product %}
+                    <h3>Updating product: {{ product.name }}</h3>
+                {% else %}
+                    <h3>Recording new product</h3>
+                {% endif %}
+                <form method="POST"> 
+                        {% csrf_token %}
+                        <div class="form-group">
+                                <label class="form-control-label">Product name</label>
+                                <input type="text" class="form-control" name="name" placeholder="Enter product name..." required {% if product %} value="{{ product.name }}" {% endif %}/>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label">Product price per unit</label>
+                            <input type="number" class="form-control" name="price" placeholder="Enter price per unit..." required step="0.01" {% if product %} value="{{ product.price }}" {% endif %}/>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label">Product quantity</label>
+                            <input type="number" class="form-control" name="quantity" placeholder="Enter product quantity..." {% if product %} value="{{ product.current_quantity }}" {% endif %}/>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label">Product unit</label>
+                            <input type="text" class="form-control" name="unit" placeholder="Enter product unit..." required {% if product %} value="{{ product.unit }}" {% endif %}/>
+                        </div>
+                        {% if product %}
+                            <button type="submit" formaction="{% url 'stock:detail' product.id %}"" class="btn">update product</button>
+                            <a href="{% url 'stock:home' %}" class="btn btn-link">New product</a>
+                        {% else %}
+                            <button type="submit" formaction="{% url 'stock:home' %}" class="btn">Save product</button>
+                        {% endif %}
+                </form>
+            </div>
+            <hr/>
+        </main>
+    </body>
+</html>
