@@ -10,6 +10,15 @@ services:
             - ./db:/app/db
             - ./stock/migrations:/app/stock/migrations
         env_file:
-            - .env
-           
+            - .env  
 
+    ngnix:
+        build: ./ngnix
+        volumes:
+            - static:/app/static
+        ports:
+            - "80:80"
+        depends_on:
+            - web
+volumes:
+    static:
