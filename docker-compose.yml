@@ -10,7 +10,6 @@ services:
             - ./db:/app/db
             - ./stock/migrations:/app/stock/migrations
             - static_volume:/app/static
-            - media_volume:/app/media
             - ./media:/app/media
         env_file:
             - .env  
@@ -19,7 +18,6 @@ services:
         build: ./ngnix
         volumes:
             - static_volume:/app/static
-            - media_volume:/app/media
             - ./media:/app/media
         ports:
             - "80:80"
@@ -27,4 +25,3 @@ services:
             - web
 volumes:
     static_volume:
-    media_volume:
