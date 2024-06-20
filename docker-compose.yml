@@ -9,15 +9,17 @@ services:
             - .:/app
             - ./db:/app/db
             - ./stock/migrations:/app/stock/migrations
-            - ./static:/app/static
+            - static_volume:/static
         env_file:
             - .env  
 
     ngnix:
         build: ./ngnix
         volumes:
-            - ./static:/app/static
+            - static_volume:/static
         ports:
-            - "8080:80"
+            - "80:80"
         depends_on:
             - web
+volumes:
+    static_volume:
