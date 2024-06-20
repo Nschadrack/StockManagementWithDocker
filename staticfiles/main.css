@@ -9,7 +9,7 @@ body{
 main{
     padding: 10px 30px;
 }
-#transactions-stock{
+.forms-stock{
     border: 2px solid white;
     border-radius: 20px;
     background-color: gray;
@@ -17,15 +17,15 @@ main{
     width: 35%;
     float: right;
 }
-#stock-list{
-    width: 60%;
-    float: left;
+.stock-list{
+    width: 48%;
 }
-#stock-list table{
+
+.stock-list table{
     width: 100%;
     border: 2px solid black;
 }
-#stock-list table tr{
+.stock-list table tr{
     border: 1px solid black;
 }
 .btn{

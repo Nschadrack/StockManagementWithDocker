@@ -7,6 +7,7 @@ class Product(models.Model):
     current_quantity = models.PositiveIntegerField(default=0)
     all_quantity = models.PositiveIntegerField(default=0)
     recorded_date = models.DateTimeField(auto_now_add=True)
+    picture = models.ImageField(upload_to="uploaded_images/", null=True, blank=True)
 
     class Meta:
         db_table = "products"

@@ -9,62 +9,123 @@
         <h2 class="header">Stock Management</h2>
         <hr/>
         <main>
-            <div class="main-divs" id="stock-list">
-                <table class="styled-table">
-                    <thead>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Current quantity</th>
-                        <th>Accumulated quantity</th>
-                        <th colspan="2"></th>
-                    </thead>
-                    <tbody>
-                        {% for product in products %}
-                            <tr>
-                                <td>{{ product.name }}</td>
-                                <td>{{ product.price }}</td>
-                                <td>{{ product.current_quantity }} {{ product.unit }}</td>
-                                <td>{{ product.all_quantity }} {{ product.unit }}</td>
-                                <td><a href="{% url 'stock:detail' product.id %}" class="btn btn-link">Edit</a></td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <div style="width: 100%;">
+                <div style="width: 35%; float: left;" class="forms-stock">
+                    {% if product %}
+                        <h3>Updating product: {{ product.name }}</h3>
+                    {% else %}
+                        <h3>Recording new product</h3>
+                    {% endif %}
+                    <form method="POST" enctype="multipart/form-data"> 
+                            {% csrf_token %}
+                            <div class="form-group">
+                                    <label class="form-control-label">Product name</label>
+                                    <input type="text" class="form-control" name="name" placeholder="Enter product name..." required {% if product %} value="{{ product.name }}" {% endif %}/>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label">Product price per unit</label>
+                                <input type="number" class="form-control" name="price" placeholder="Enter price per unit..." required step="0.01" {% if product %} value="{{ product.price }}" readonly {% endif %}/>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label">Product quantity</label>
+                                <input type="number" class="form-control" name="quantity" placeholder="Enter product quantity..." {% if product %} value="{{ product.current_quantity }}" readonly {% endif %}/>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label">Product unit</label>
+                                <input type="text" class="form-control" name="unit" placeholder="Enter product unit..." required {% if product %} value="{{ product.unit }}" {% endif %}/>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label">Product picture</label>
+                                <input type="file" class="form-control" name="picture" maxlength="255"/>
+                            </div>
+                            {% if product %}
+                                <button type="submit" formaction="{% url 'stock:detail' product.id %}"" class="btn">update product</button>
+                                <a href="{% url 'stock:home' %}" class="btn btn-link">New product</a>
+                            {% else %}
+                                <button type="submit" formaction="{% url 'stock:home' %}" class="btn">Save product</button>
+                            {% endif %}
+                    </form><br/>
+                    {% if product %}
+                    <h3>Adding new transaction: {{ product.name }}</h3>
+                    <form method="POST"> 
+                            {% csrf_token %}
+                            <div class="form-group">
+                                    <label class="form-control-label">Transaction category</label>
+                                    <select name="category" required class="form-control">
+                                        <option value="IN">IN</option>
+                                        <option value="OUT">OUT</option>
+                                    </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label">Product</label><br/>
+                                <input type="text" class="form-control" value="{{ product.name }}"  readonly/>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label">Transaction product quantity</label>
+                                <input type="number" class="form-control" name="quantity" placeholder="Enter product quantity..."/>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label">Transaction description</label>
+                                <input type="text" class="form-control" name="comment" maxlength="255" placeholder="Enter short description for this transaction" />
+                            </div>
+                            <button type="submit" formaction="{% url 'stock:transaction' product.id %}" class="btn">Save transaction</button>
+                    </form>
+                    {% endif %}
+                </div>
+                <div class="stock-list" style="float: right; width: 60%;">
+                    <table class="styled-table">
+                        <thead>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Current quantity</th>
+                            <th>Accumulated quantity</th>
+                            <th>Product picture</th>
+                            <th colspan="2"></th>
+                        </thead>
+                        <tbody>
+                            {% for product in products %}
+                                <tr>
+                                    <td>{{ product.name }}</td>
+                                    <td>{{ product.price }}</td>
+                                    <td>{{ product.current_quantity }} {{ product.unit }}</td>
+                                    <td>{{ product.all_quantity }} {{ product.unit }}</td>
+                                    <td>
+                                        {% if product.picture %}
+                                            <img src="{{ product.picture.url }}" alt="no image" width="50" height="50"/>
+                                        {% endif %}
+                                    </td>
+                                    <td><a href="{% url 'stock:detail' product.id %}" class="btn btn-link">Edit</a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
                 
             </div>
-            <div class="main-divs" id="transactions-stock">
-                {% if product %}
-                    <h3>Updating product: {{ product.name }}</h3>
-                {% else %}
-                    <h3>Recording new product</h3>
-                {% endif %}
-                <form method="POST"> 
-                        {% csrf_token %}
-                        <div class="form-group">
-                                <label class="form-control-label">Product name</label>
-                                <input type="text" class="form-control" name="name" placeholder="Enter product name..." required {% if product %} value="{{ product.name }}" {% endif %}/>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-control-label">Product price per unit</label>
-                            <input type="number" class="form-control" name="price" placeholder="Enter price per unit..." required step="0.01" {% if product %} value="{{ product.price }}" {% endif %}/>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-control-label">Product quantity</label>
-                            <input type="number" class="form-control" name="quantity" placeholder="Enter product quantity..." {% if product %} value="{{ product.current_quantity }}" {% endif %}/>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-control-label">Product unit</label>
-                            <input type="text" class="form-control" name="unit" placeholder="Enter product unit..." required {% if product %} value="{{ product.unit }}" {% endif %}/>
-                        </div>
-                        {% if product %}
-                            <button type="submit" formaction="{% url 'stock:detail' product.id %}"" class="btn">update product</button>
-                            <a href="{% url 'stock:home' %}" class="btn btn-link">New product</a>
-                        {% else %}
-                            <button type="submit" formaction="{% url 'stock:home' %}" class="btn">Save product</button>
-                        {% endif %}
-                </form>
+            <div id="tables">
+                <div class="stock-list" style="float: right; width: 60%;">
+                    <table class="styled-table">
+                        <thead>
+                            <th>Transaction category</th>
+                            <th>Transaction quantity</th>
+                            <th>Product</th>
+                            <th>Recorded date</th>
+                            <th>Description</th>
+                        </thead>
+                        <tbody>
+                            {% for transaction in transactions %}
+                                <tr>
+                                    <td>{{ transaction.category }}</td>
+                                    <td>{{ transaction.quantity }} {{ transaction.product.unit }}</td>
+                                    <td>{{ transaction.product.name }}</td>
+                                    <td>{{ transaction.movement_date|date:'Y-m-d H:i:s' }}</td>
+                                    <td>{{ transaction.comment }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <hr/>
         </main>
     </body>
 </html>

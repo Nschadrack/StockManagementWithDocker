@@ -135,7 +135,20 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "staticfiles")
 ]
 
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = "media/"
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# settings.py
+FILE_UPLOAD_MAX_MEMORY_SIZE = 20971520  # 10 MB
+CSRF_TRUSTED_ORIGINS  = [
+    'http://127.0.0.1:80',
+    'http://localhost:80',
+    'http://127.0.0.1:8000',
+    'http://localhost:8000',
+]
+
